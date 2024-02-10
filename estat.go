@@ -2,8 +2,31 @@ package estat
 
 import (
 	"encoding/json"
+	"io"
+	"net/http"
+	"net/url"
 	"time"
 )
+
+func GetStats(query url.Values) (*GetStatsData, error) {
+	resp, err := http.Get("http://api.e-stat.go.jp/rest/3.0/app/json/getStatsData?" + query.Encode())
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := Response{}
+	if err := json.Unmarshal(data, &response); err != nil {
+		return nil, err
+	}
+	return &response.GetStatsData, nil
+}
 
 // https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0
 type Response struct {
