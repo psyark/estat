@@ -10,9 +10,22 @@ type Response struct {
 }
 
 type GetStatsData struct {
-	Parameter       json.RawMessage `json:"PARAMETER"`
+	Parameter       Parameter       `json:"PARAMETER"`
 	Result          json.RawMessage `json:"RESULT"`
 	StatisticalData StatisticalData `json:"STATISTICAL_DATA"`
+}
+
+type Parameter struct {
+	AnnotationGetFlg  string `json:"ANNOTATION_GET_FLG"`
+	CntGetFlg         string `json:"CNT_GET_FLG"`
+	DataFormat        string `json:"DATA_FORMAT"`
+	ExplanationGetFlg string `json:"EXPLANATION_GET_FLG"`
+	Lang              string `json:"LANG"`
+	MetagetFlg        string `json:"METAGET_FLG"`
+	ReplaceSpChars    int    `json:"REPLACE_SP_CHARS"`
+	SectionHeaderFlg  int    `json:"SECTION_HEADER_FLG"`
+	StartPosition     int    `json:"START_POSITION"`
+	StatsDataID       string `json:"STATS_DATA_ID"`
 }
 
 type StatisticalData struct {
