@@ -42,10 +42,10 @@ type Parameter struct {
 // StatisticalData is 4.4.2. STATISTICAL_DATA タグ
 // 統計データの情報を出力します。エラーがあった場合はこのタグ自体出力されません。
 type StatisticalData struct {
-	ResultInf ResultInf       `json:"RESULT_INF"`
-	TableInf  TableInf        `json:"TABLE_INF"`
-	ClassInf  ClassInf        `json:"CLASS_INF"`
-	DataInf   json.RawMessage `json:"DATA_INF"`
+	ResultInf ResultInf `json:"RESULT_INF"`
+	TableInf  TableInf  `json:"TABLE_INF"`
+	ClassInf  ClassInf  `json:"CLASS_INF"`
+	DataInf   DataInf   `json:"DATA_INF"`
 }
 
 type ResultInf struct {
@@ -88,6 +88,24 @@ type Class struct {
 	Name       string `json:"@name"`
 	Unit       string `json:"@unit,omitempty"`
 	ParentCode string `json:"@parentCode,omitempty"`
+}
+
+type DataInf struct {
+	Note  []Note  `json:"NOTE"`
+	Value []Value `json:"VALUE"`
+}
+
+type Note struct {
+	Annotation string `json:"$"`
+	Char       string `json:"@char"`
+}
+
+type Value struct {
+	Annotation string `json:"$"`
+	Cat01      string `json:"@cat01"`
+	Tab        string `json:"@tab"`
+	Time       string `json:"@time"`
+	Unit       string `json:"@unit"`
 }
 
 type AnnotatedCode struct {
