@@ -113,6 +113,9 @@ type Class struct {
 	ParentCode string `json:"@parentCode,omitempty"`
 }
 
+// DATA_INF	統計データの数値情報を出力します。
+// 指定した絞り込み条件又はデータセットの条件又はその両方の条件によって抽出されるデータ件数が 0 の場合、このタグは出力されません。
+// また、件数取得フラグ(cntGetFlg)に”Y”(件数のみ取得する)を指定した場合も出力されません。
 type DataInf struct {
 	Note  []Note  `json:"NOTE"`
 	Value []Value `json:"VALUE"`
@@ -123,12 +126,14 @@ type Note struct {
 	Char       string `json:"@char"`
 }
 
+// VALUE	統計数値(セル)の情報です。データ件数分だけ出力されます。
+// 属性として表章事項コード(tab)、分類事項コード(cat01 ～ cat15)、地域事項コード(area)、時間軸事項コード(time)、単位(unit)、注釈記号(anotation)を保持します。全ての属性はデータがある場合のみ出力されます。
 type Value struct {
-	Annotation string `json:"$"`
-	Cat01      string `json:"@cat01"`
-	Tab        string `json:"@tab"`
-	Time       string `json:"@time"`
-	Unit       string `json:"@unit"`
+	Value int    `json:"$,string"`
+	Cat01 string `json:"@cat01"`
+	Tab   string `json:"@tab"`
+	Time  string `json:"@time"`
+	Unit  string `json:"@unit"`
 }
 
 type AnnotatedCode struct {
