@@ -95,23 +95,28 @@ type ResultInf struct {
 }
 
 type TableInf struct {
-	ID                 string          `json:"@id"`
-	CollectArea        string          `json:"COLLECT_AREA"`
-	Cycle              string          `json:"CYCLE"`
-	Description        string          `json:"DESCRIPTION"`
-	GovOrg             AnnotatedCode   `json:"GOV_ORG"`
-	MainCategory       AnnotatedCode   `json:"MAIN_CATEGORY"`
-	OpenDate           string          `json:"OPEN_DATE"`
-	OverallTotalNumber int             `json:"OVERALL_TOTAL_NUMBER"`
-	SmallArea          int             `json:"SMALL_AREA"`
-	StatisticsName     string          `json:"STATISTICS_NAME"`
-	StatisticsNameSpec json.RawMessage `json:"STATISTICS_NAME_SPEC"`
-	StatName           AnnotatedCode   `json:"STAT_NAME"`
-	SubCategory        AnnotatedCode   `json:"SUB_CATEGORY"`
-	SurveyDate         any             `json:"SURVEY_DATE"` // "200104-200203" or 0
-	Title              any             `json:"TITLE"`       // "第１表　月（12区分）、施設所在地(47区分及び運輸局等)、従業者数(4区分)、宿泊目的割合(2区分)別施設数" or {"$":"新規就農者調査 就農形態別新規就農者数", "@no":1}
-	TitleSpec          TitleSpec       `json:"TITLE_SPEC"`
-	UpdatedDate        string          `json:"UPDATED_DATE"`
+	ID                 string             `json:"@id"`
+	CollectArea        string             `json:"COLLECT_AREA"`
+	Cycle              string             `json:"CYCLE"`
+	Description        string             `json:"DESCRIPTION"`
+	GovOrg             AnnotatedCode      `json:"GOV_ORG"`
+	MainCategory       AnnotatedCode      `json:"MAIN_CATEGORY"`
+	OpenDate           string             `json:"OPEN_DATE"`
+	OverallTotalNumber int                `json:"OVERALL_TOTAL_NUMBER"`
+	SmallArea          int                `json:"SMALL_AREA"`
+	StatisticsName     string             `json:"STATISTICS_NAME"`
+	StatisticsNameSpec StatisticsNameSpec `json:"STATISTICS_NAME_SPEC"`
+	StatName           AnnotatedCode      `json:"STAT_NAME"`
+	SubCategory        AnnotatedCode      `json:"SUB_CATEGORY"`
+	SurveyDate         any                `json:"SURVEY_DATE"` // "200104-200203" or 0
+	Title              any                `json:"TITLE"`       // "第１表　月（12区分）、施設所在地(47区分及び運輸局等)、従業者数(4区分)、宿泊目的割合(2区分)別施設数" or {"$":"新規就農者調査 就農形態別新規就農者数", "@no":1}
+	TitleSpec          TitleSpec          `json:"TITLE_SPEC"`
+	UpdatedDate        string             `json:"UPDATED_DATE"`
+}
+type StatisticsNameSpec struct {
+	TabulationCategory     string `json:"TABULATION_CATEGORY"`
+	TabulationSubCategory1 string `json:"TABULATION_SUB_CATEGORY1,omitempty"`
+	TabulationSubCategory2 string `json:"TABULATION_SUB_CATEGORY2,omitempty"`
 }
 type TitleSpec struct {
 	TableCategory    string `json:"TABLE_CATEGORY,omitempty"`

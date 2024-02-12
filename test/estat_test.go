@@ -68,6 +68,10 @@ func TestXxx(t *testing.T) {
 				t.Fatal("unmatch")
 			}
 
+			// fmt.Println(typed.GetStatsData.StatisticalData.TableInf.GovOrg.Annotation)
+			// fmt.Println(typed.GetStatsData.StatisticalData.TableInf.StatisticsName)
+			// fmt.Println(typed.GetStatsData.StatisticalData.TableInf.Title)
+
 			// fmt.Println(string(data2))
 			// for _, classObj := range typed.GetStatsData.StatisticalData.ClassInf.ClassObj {
 			// 	fmt.Println(classObj.ID, classObj.Name)
