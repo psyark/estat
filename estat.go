@@ -53,8 +53,13 @@ func (r Result) MarshalJSON() ([]byte, error) {
 		Alias
 		Date string `json:"DATE"`
 	}{
-		Alias(r),
-		r.Date.Format("2006-01-02T15:04:05.000-07:00"),
+		Alias: Alias(r),
+	}
+
+	if r.Date.UnixMilli() == 0 {
+		t.Date = r.Date.Format("2006-01-02T15:04:05-07:00")
+	} else {
+		t.Date = r.Date.Format("2006-01-02T15:04:05.000-07:00")
 	}
 	return json.Marshal(t)
 }
@@ -149,7 +154,7 @@ type Value struct {
 	Cat02 string `json:"@cat02,omitempty"`
 	Cat03 string `json:"@cat03,omitempty"`
 	Area  string `json:"@area,omitempty"`
-	Time  string `json:"@time"`
+	Time  string `json:"@time,omitempty"`
 	Unit  string `json:"@unit"`
 }
 
