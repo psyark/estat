@@ -76,7 +76,7 @@ func Example_s0004009602() {
 	result := map[string]string{}
 	s("0004009602", func(gsd *estat.GetStatsData, v estat.Value) {
 		if v.Tab == "0060" && v.Cat01 == "6" {
-			time := getClassName(gsd.StatisticalData, "time", v.Time)
+			time := getClass(gsd.StatisticalData.ClassInf.Time(), v.Time)
 			result[time.Name] = fmt.Sprintf("%v%v", v.Value, v.Unit)
 		}
 	})
@@ -140,8 +140,8 @@ func Example_s0003354197() {
 	result := map[string]map[string]string{}
 	s("0003354197", func(gsd *estat.GetStatsData, v estat.Value) {
 		if v.Cat03 == "100" && v.Time == "2001100000" {
-			cat01 := getClassName(gsd.StatisticalData, "cat01", v.Cat01)
-			cat02 := getClassName(gsd.StatisticalData, "cat02", v.Cat02)
+			cat01 := getClass(gsd.StatisticalData.ClassInf.Cat01(), v.Cat01)
+			cat02 := getClass(gsd.StatisticalData.ClassInf.Cat02(), v.Cat02)
 			if result[cat02.Name] == nil {
 				result[cat02.Name] = map[string]string{}
 			}
@@ -230,14 +230,10 @@ func s(statsDataId string, f func(*estat.GetStatsData, estat.Value)) {
 	}
 }
 
-func getClassName(statisticalData estat.StatisticalData, classID string, classCode string) *estat.Class {
-	for _, classObj := range statisticalData.ClassInf.ClassObj {
-		if classObj.ID == classID {
-			for _, class := range classObj.Class {
-				if class.Code == classCode {
-					return &class
-				}
-			}
+func getClass(classObj *estat.ClassObj, classCode string) *estat.Class {
+	for _, class := range classObj.Class {
+		if class.Code == classCode {
+			return &class
 		}
 	}
 	return nil
