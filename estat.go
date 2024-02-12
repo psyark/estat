@@ -158,7 +158,7 @@ type Note struct {
 // VALUE	統計数値(セル)の情報です。データ件数分だけ出力されます。
 // 属性として表章事項コード(tab)、分類事項コード(cat01 ～ cat15)、地域事項コード(area)、時間軸事項コード(time)、単位(unit)、注釈記号(anotation)を保持します。全ての属性はデータがある場合のみ出力されます。
 type Value struct {
-	Value any    `json:"$"`
+	Value string `json:"$"` // 二重引用符付きの数値が入ったり、特殊文字 "-" 等が入ったりする
 	Tab   string `json:"@tab,omitempty"`
 	Cat01 string `json:"@cat01,omitempty"`
 	Cat02 string `json:"@cat02,omitempty"`
