@@ -108,15 +108,6 @@ type ClassObj struct {
 
 type ClassHelper []Class
 
-func (c *ClassHelper) UnmarshalJSON(d []byte) error {
-	if d[0] == '{' {
-		*c = []Class{{}}
-		return json.Unmarshal(d, &(*c)[0])
-	} else {
-		return json.Unmarshal(d, (*[]Class)(c))
-	}
-}
-
 func (c ClassHelper) MarshalJSON() ([]byte, error) {
 	if len(c) == 1 {
 		return json.Marshal(c[0])
@@ -142,15 +133,6 @@ type DataInf struct {
 }
 
 type NoteHelper []Note
-
-func (c *NoteHelper) UnmarshalJSON(d []byte) error {
-	if d[0] == '{' {
-		*c = []Note{{}}
-		return json.Unmarshal(d, &(*c)[0])
-	} else {
-		return json.Unmarshal(d, (*[]Note)(c))
-	}
-}
 
 func (c NoteHelper) MarshalJSON() ([]byte, error) {
 	if len(c) == 1 {
