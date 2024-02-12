@@ -22,7 +22,7 @@ func TestXxx(t *testing.T) {
 	for _, statsDataId := range []string{"0003354197", "0004009602", "0003313482", "0002019042"} {
 		statsDataId := statsDataId
 		t.Run(statsDataId, func(t *testing.T) {
-			query, err := url.ParseQuery("lang=J&&explanationGetFlg=Y&annotationGetFlg=Y&sectionHeaderFlg=1&replaceSpChars=0")
+			query, err := url.ParseQuery("lang=J")
 			if err != nil {
 				t.Fatal(err)
 			}

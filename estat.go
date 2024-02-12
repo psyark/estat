@@ -67,14 +67,14 @@ func (r Result) MarshalJSON() ([]byte, error) {
 // Parameter is 4.4.1. PARAMETER タグ
 // リクエスト時に指定されたパラメータを出力します。パラメータ名を間違えた場合や別のAPIのパラメータを指定した場合は出力されません。
 type Parameter struct {
-	AnnotationGetFlg  string `json:"ANNOTATION_GET_FLG"`
+	AnnotationGetFlg  string `json:"ANNOTATION_GET_FLG,omitempty"`
 	CntGetFlg         string `json:"CNT_GET_FLG,omitempty"`
 	DataFormat        string `json:"DATA_FORMAT"`
-	ExplanationGetFlg string `json:"EXPLANATION_GET_FLG"`
+	ExplanationGetFlg string `json:"EXPLANATION_GET_FLG,omitempty"`
 	Lang              string `json:"LANG"`
 	MetagetFlg        string `json:"METAGET_FLG"`
-	ReplaceSpChars    int    `json:"REPLACE_SP_CHARS"`
-	SectionHeaderFlg  int    `json:"SECTION_HEADER_FLG"`
+	ReplaceSpChars    int    `json:"REPLACE_SP_CHARS,omitempty"`
+	SectionHeaderFlg  int    `json:"SECTION_HEADER_FLG,omitempty"`
 	StartPosition     int    `json:"START_POSITION"`
 	StatsDataID       string `json:"STATS_DATA_ID"`
 }
