@@ -106,16 +106,6 @@ type ClassObj struct {
 	Class ClassHelper `json:"CLASS"`
 }
 
-type ClassHelper []Class
-
-func (c ClassHelper) MarshalJSON() ([]byte, error) {
-	if len(c) == 1 {
-		return json.Marshal(c[0])
-	} else {
-		return json.Marshal([]Class(c))
-	}
-}
-
 type Class struct {
 	Code       string `json:"@code"`
 	Level      string `json:"@level"`
@@ -130,16 +120,6 @@ type Class struct {
 type DataInf struct {
 	Note  NoteHelper `json:"NOTE"`
 	Value []Value    `json:"VALUE"`
-}
-
-type NoteHelper []Note
-
-func (c NoteHelper) MarshalJSON() ([]byte, error) {
-	if len(c) == 1 {
-		return json.Marshal(c[0])
-	} else {
-		return json.Marshal([]Note(c))
-	}
 }
 
 type Note struct {
