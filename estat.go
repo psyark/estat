@@ -47,6 +47,18 @@ type Result struct {
 	Status   int       `json:"STATUS"`
 }
 
+func (r Result) MarshalJSON() ([]byte, error) {
+	type Alias Result
+	t := struct {
+		Alias
+		Date string `json:"DATE"`
+	}{
+		Alias(r),
+		r.Date.Format("2006-01-02T15:04:05.000-07:00"),
+	}
+	return json.Marshal(t)
+}
+
 // Parameter is 4.4.1. PARAMETER タグ
 // リクエスト時に指定されたパラメータを出力します。パラメータ名を間違えた場合や別のAPIのパラメータを指定した場合は出力されません。
 type Parameter struct {
