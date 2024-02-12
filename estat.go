@@ -113,9 +113,10 @@ type ClassInf struct {
 	ClassObj []ClassObj `json:"CLASS_OBJ"`
 }
 type ClassObj struct {
-	ID    string      `json:"@id"`
-	Name  string      `json:"@name"`
-	Class ClassHelper `json:"CLASS"`
+	ID          string        `json:"@id"`
+	Name        string        `json:"@name"`
+	Class       ClassHelper   `json:"CLASS"`
+	Explanation []AnnotatedId `json:"EXPLANATION,omitempty"`
 }
 
 type Class struct {
@@ -143,10 +144,11 @@ type Note struct {
 // 属性として表章事項コード(tab)、分類事項コード(cat01 ～ cat15)、地域事項コード(area)、時間軸事項コード(time)、単位(unit)、注釈記号(anotation)を保持します。全ての属性はデータがある場合のみ出力されます。
 type Value struct {
 	Value any    `json:"$"`
+	Tab   string `json:"@tab,omitempty"`
 	Cat01 string `json:"@cat01,omitempty"`
 	Cat02 string `json:"@cat02,omitempty"`
 	Cat03 string `json:"@cat03,omitempty"`
-	Tab   string `json:"@tab,omitempty"`
+	Area  string `json:"@area,omitempty"`
 	Time  string `json:"@time"`
 	Unit  string `json:"@unit"`
 }
@@ -158,5 +160,10 @@ type AnnotatedCode struct {
 
 type AnnotatedNo struct {
 	No         string `json:"@no"`
+	Annotation string `json:"$"`
+}
+
+type AnnotatedId struct {
+	Id         string `json:"@id"`
 	Annotation string `json:"$"`
 }
