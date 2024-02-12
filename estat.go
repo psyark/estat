@@ -95,23 +95,28 @@ type ResultInf struct {
 }
 
 type TableInf struct {
-	ID                   string          `json:"@id"`
-	COLLECT_AREA         string          `json:"COLLECT_AREA"`
-	CYCLE                string          `json:"CYCLE"`
-	DESCRIPTION          string          `json:"DESCRIPTION"`
-	GOV_ORG              AnnotatedCode   `json:"GOV_ORG"`
-	MAIN_CATEGORY        AnnotatedCode   `json:"MAIN_CATEGORY"`
-	OPEN_DATE            string          `json:"OPEN_DATE"`
-	OVERALL_TOTAL_NUMBER int             `json:"OVERALL_TOTAL_NUMBER"`
-	SMALL_AREA           int             `json:"SMALL_AREA"`
-	STATISTICS_NAME      string          `json:"STATISTICS_NAME"`
-	STATISTICS_NAME_SPEC json.RawMessage `json:"STATISTICS_NAME_SPEC"`
-	STAT_NAME            AnnotatedCode   `json:"STAT_NAME"`
-	SUB_CATEGORY         AnnotatedCode   `json:"SUB_CATEGORY"`
-	SURVEY_DATE          json.RawMessage `json:"SURVEY_DATE"`
-	TITLE                json.RawMessage `json:"TITLE"`
-	TITLE_SPEC           json.RawMessage `json:"TITLE_SPEC"`
-	UPDATED_DATE         string          `json:"UPDATED_DATE"`
+	ID                 string          `json:"@id"`
+	CollectArea        string          `json:"COLLECT_AREA"`
+	Cycle              string          `json:"CYCLE"`
+	Description        string          `json:"DESCRIPTION"`
+	GovOrg             AnnotatedCode   `json:"GOV_ORG"`
+	MainCategory       AnnotatedCode   `json:"MAIN_CATEGORY"`
+	OpenDate           string          `json:"OPEN_DATE"`
+	OverallTotalNumber int             `json:"OVERALL_TOTAL_NUMBER"`
+	SmallArea          int             `json:"SMALL_AREA"`
+	StatisticsName     string          `json:"STATISTICS_NAME"`
+	StatisticsNameSpec json.RawMessage `json:"STATISTICS_NAME_SPEC"`
+	StatName           AnnotatedCode   `json:"STAT_NAME"`
+	SubCategory        AnnotatedCode   `json:"SUB_CATEGORY"`
+	SurveyDate         any             `json:"SURVEY_DATE"` // "200104-200203" or 0
+	Title              any             `json:"TITLE"`       // "第１表　月（12区分）、施設所在地(47区分及び運輸局等)、従業者数(4区分)、宿泊目的割合(2区分)別施設数" or {"$":"新規就農者調査 就農形態別新規就農者数", "@no":1}
+	TitleSpec          TitleSpec       `json:"TITLE_SPEC"`
+	UpdatedDate        string          `json:"UPDATED_DATE"`
+}
+type TitleSpec struct {
+	TableCategory    string `json:"TABLE_CATEGORY,omitempty"`
+	TableName        string `json:"TABLE_NAME,omitempty"`
+	TableExplanation string `json:"TABLE_EXPLANATION,omitempty"`
 }
 
 type ClassInf struct {
