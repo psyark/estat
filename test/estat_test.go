@@ -56,29 +56,18 @@ func r(query string) func(*testing.T) {
 
 		data1, _ := json.MarshalIndent(untyped, "", "  ")
 		data2, _ := json.MarshalIndent(typed, "", "  ")
-		{
-			patch, err := jsondiff.CompareJSON(data2, data1)
-			if err != nil {
-				t.Fatal(err)
-			}
 
-			for _, op := range patch {
-				fmt.Printf("%s\n", op)
-			}
+		patch, err := jsondiff.CompareJSON(data1, data2)
+		if err != nil {
+			t.Fatal(err)
 		}
-		{
-			patch, err := jsondiff.CompareJSON(data1, data2)
-			if err != nil {
-				t.Fatal(err)
-			}
 
-			for _, op := range patch {
-				fmt.Printf("%s\n", op)
-			}
+		for _, op := range patch {
+			fmt.Printf("%v %v: value=%v, oldValue=%v\n", op.Type, op.Path, op.Value, op.OldValue)
+		}
 
-			if len(patch) != 0 {
-				t.Fatal("unmatch")
-			}
+		if len(patch) != 0 {
+			t.Fatal("unmatch")
 		}
 
 		// fmt.Println(string(data2))
