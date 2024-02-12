@@ -22,7 +22,7 @@ func TestXxx(t *testing.T) {
 	for _, statsDataId := range []string{"0003354197", "0004009602", "0003313482", "0002019042"} {
 		statsDataId := statsDataId
 		t.Run(statsDataId, func(t *testing.T) {
-			query, err := url.ParseQuery("lang=J&metaGetFlg=Y&cntGetFlg=N&explanationGetFlg=Y&annotationGetFlg=Y&sectionHeaderFlg=1&replaceSpChars=0")
+			query, err := url.ParseQuery("lang=J&&explanationGetFlg=Y&annotationGetFlg=Y&sectionHeaderFlg=1&replaceSpChars=0")
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -53,6 +53,9 @@ func TestXxx(t *testing.T) {
 			}
 
 			data1, _ := json.MarshalIndent(untyped, "", "  ")
+
+			os.WriteFile(fmt.Sprintf("testdata/%s.json", statsDataId), data1, 0666)
+
 			data2, _ := json.MarshalIndent(typed, "", "  ")
 
 			patch, err := jsondiff.CompareJSON(data1, data2)
@@ -73,12 +76,12 @@ func TestXxx(t *testing.T) {
 			// fmt.Println(typed.GetStatsData.StatisticalData.TableInf.Title)
 
 			// fmt.Println(string(data2))
-			// for _, classObj := range typed.GetStatsData.StatisticalData.ClassInf.ClassObj {
-			// 	fmt.Println(classObj.ID, classObj.Name)
-			// 	for _, class := range classObj.Class {
-			// 		fmt.Println("    ", class)
-			// 	}
-			// }
+			for _, classObj := range typed.GetStatsData.StatisticalData.ClassInf.ClassObj {
+				fmt.Println(classObj.ID, classObj.Name)
+				for _, class := range classObj.Class {
+					fmt.Println("    ", class)
+				}
+			}
 		})
 	}
 }

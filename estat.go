@@ -68,7 +68,7 @@ func (r Result) MarshalJSON() ([]byte, error) {
 // リクエスト時に指定されたパラメータを出力します。パラメータ名を間違えた場合や別のAPIのパラメータを指定した場合は出力されません。
 type Parameter struct {
 	AnnotationGetFlg  string `json:"ANNOTATION_GET_FLG"`
-	CntGetFlg         string `json:"CNT_GET_FLG"`
+	CntGetFlg         string `json:"CNT_GET_FLG,omitempty"`
 	DataFormat        string `json:"DATA_FORMAT"`
 	ExplanationGetFlg string `json:"EXPLANATION_GET_FLG"`
 	Lang              string `json:"LANG"`
