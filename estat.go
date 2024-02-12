@@ -127,11 +127,30 @@ type TitleSpec struct {
 type ClassInf struct {
 	ClassObj []ClassObj `json:"CLASS_OBJ"`
 }
+
+func (i *ClassInf) GetClassObj(id string) *ClassObj {
+	for _, o := range i.ClassObj {
+		if o.ID == id {
+			return &o
+		}
+	}
+	return nil
+}
+
 type ClassObj struct {
 	ID          string        `json:"@id"`
 	Name        string        `json:"@name"`
 	Class       ClassHelper   `json:"CLASS"`
 	Explanation []AnnotatedId `json:"EXPLANATION,omitempty"`
+}
+
+func (o *ClassObj) GetClass(code string) *Class {
+	for _, c := range o.Class {
+		if c.Code == code {
+			return &c
+		}
+	}
+	return nil
 }
 
 type Class struct {

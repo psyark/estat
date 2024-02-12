@@ -37,20 +37,11 @@ func TestXxx(t *testing.T) {
 		).Line()
 	}
 
-	f.Func().Id("findClassObj").Params(jen.Id("list").Index().Id("ClassObj"), jen.Id("id").String()).Op("*").Id("ClassObj").Block(
-		jen.For(jen.List(jen.Id("_"), jen.Id("o")).Op(":=").Range().Id("list")).Block(
-			jen.If(jen.Id("o").Dot("ID").Op("==").Id("id")).Block(
-				jen.Return(jen.Op("&").Id("o")),
-			),
-		),
-		jen.Return(jen.Nil()),
-	)
-
 	for _, classId := range []string{"area", "time", "cat01", "cat02"} {
 		upper := strings.ToUpper(classId[0:1]) + classId[1:]
 
 		f.Func().Params(jen.Id("c").Id("ClassInf")).Id(upper).Params().Op("*").Id("ClassObj").Block(
-			jen.Return().Id("findClassObj").Call(jen.Id("c").Dot("ClassObj"), jen.Lit(classId)),
+			jen.Return().Id("c").Dot("GetClassObj").Call(jen.Lit(classId)),
 		)
 	}
 

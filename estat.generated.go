@@ -44,23 +44,15 @@ func (c NoteHelper) MarshalJSON() ([]byte, error) {
 	}
 }
 
-func findClassObj(list []ClassObj, id string) *ClassObj {
-	for _, o := range list {
-		if o.ID == id {
-			return &o
-		}
-	}
-	return nil
-}
 func (c ClassInf) Area() *ClassObj {
-	return findClassObj(c.ClassObj, "area")
+	return c.GetClassObj("area")
 }
 func (c ClassInf) Time() *ClassObj {
-	return findClassObj(c.ClassObj, "time")
+	return c.GetClassObj("time")
 }
 func (c ClassInf) Cat01() *ClassObj {
-	return findClassObj(c.ClassObj, "cat01")
+	return c.GetClassObj("cat01")
 }
 func (c ClassInf) Cat02() *ClassObj {
-	return findClassObj(c.ClassObj, "cat02")
+	return c.GetClassObj("cat02")
 }
