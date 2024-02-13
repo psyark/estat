@@ -1,72 +1,49 @@
 package estat
 
 import (
+	"context"
 	"encoding/json"
-	"io"
 	"net/http"
 	"net/url"
-	"time"
 )
 
-func GetStats(query url.Values) (*GetStatsData, error) {
-	resp, err := http.Get("http://api.e-stat.go.jp/rest/3.0/app/json/getStatsData?" + query.Encode())
+// 指定した統計表ID又はデータセットIDに対応する統計データ（数値データ）を取得します。
+func GetStatsData(ctx context.Context, query url.Values) (*GetStatsDataResult, error) {
+	// https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0#api_2_3
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "http://api.e-stat.go.jp/rest/3.0/app/json/getStatsData?"+query.Encode(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
 
 	defer resp.Body.Close()
 
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
+	response := GetStatsDataResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
 		return nil, err
 	}
 
-	response := Response{}
-	if err := json.Unmarshal(data, &response); err != nil {
-		return nil, err
-	}
 	return &response.GetStatsData, nil
 }
 
-// https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0
-type Response struct {
-	GetStatsData GetStatsData `json:"GET_STATS_DATA"`
+// https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0#api_4_4
+type GetStatsDataResponse struct {
+	GetStatsData GetStatsDataResult `json:"GET_STATS_DATA"`
 }
 
-type GetStatsData struct {
-	Result          Result          `json:"RESULT"`
-	Parameter       Parameter       `json:"PARAMETER"`
-	StatisticalData StatisticalData `json:"STATISTICAL_DATA"`
+type GetStatsDataResult struct {
+	Result          Result                `json:"RESULT"`
+	Parameter       GetStatsDataParameter `json:"PARAMETER"`
+	StatisticalData StatisticalData       `json:"STATISTICAL_DATA"`
 }
 
-// Result is 4.1.1. RESULT タグ
-// すべてのAPI共通で、以下の要素を出力します。
-type Result struct {
-	Date     time.Time `json:"DATE"`
-	ErrorMsg string    `json:"ERROR_MSG"`
-	Status   int       `json:"STATUS"`
-}
-
-func (r Result) MarshalJSON() ([]byte, error) {
-	type Alias Result
-	t := struct {
-		Alias
-		Date string `json:"DATE"`
-	}{
-		Alias: Alias(r),
-	}
-
-	if r.Date.UnixMilli() == 0 {
-		t.Date = r.Date.Format("2006-01-02T15:04:05-07:00")
-	} else {
-		t.Date = r.Date.Format("2006-01-02T15:04:05.000-07:00")
-	}
-	return json.Marshal(t)
-}
-
-// Parameter is 4.4.1. PARAMETER タグ
+// GetStatsDataParameter is 4.4.1. PARAMETER タグ
 // リクエスト時に指定されたパラメータを出力します。パラメータ名を間違えた場合や別のAPIのパラメータを指定した場合は出力されません。
-type Parameter struct {
+type GetStatsDataParameter struct {
 	AnnotationGetFlg  string `json:"ANNOTATION_GET_FLG,omitempty"`
 	CntGetFlg         string `json:"CNT_GET_FLG,omitempty"`
 	DataFormat        string `json:"DATA_FORMAT"`

@@ -45,7 +45,7 @@ func TestXxx(t *testing.T) {
 		)
 	}
 
-	if err := f.Save("../estat.generated.go"); err != nil {
+	if err := f.Save("../getstatsdata.gen.go"); err != nil {
 		t.Fatal(err)
 	}
 }

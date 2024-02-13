@@ -1,6 +1,7 @@
 package test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -45,7 +46,7 @@ func TestXxx(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			typed := estat.Response{}
+			typed := estat.GetStatsDataResponse{}
 			if err := json.Unmarshal(data, &typed); err != nil {
 				t.Fatal(err)
 			}
@@ -74,7 +75,7 @@ func TestXxx(t *testing.T) {
 
 func Example_s0004009602() {
 	result := map[string]string{}
-	s("0004009602", func(gsd *estat.GetStatsData, v estat.Value) {
+	s("0004009602", func(gsd *estat.GetStatsDataResult, v estat.Value) {
 		if v.Tab == "0060" && v.Cat01 == "6" {
 			time := gsd.StatisticalData.ClassInf.Time().GetClass(v.Time)
 			result[time.Name] = fmt.Sprintf("%v%v", v.Value, v.Unit)
@@ -138,7 +139,7 @@ func Example_s0004009602() {
 
 func Example_s0003354197() {
 	result := map[string]map[string]string{}
-	s("0003354197", func(gsd *estat.GetStatsData, v estat.Value) {
+	s("0003354197", func(gsd *estat.GetStatsDataResult, v estat.Value) {
 		if v.Cat03 == "100" && v.Time == "2001100000" {
 			cat01 := gsd.StatisticalData.ClassInf.Cat01().GetClass(v.Cat01)
 			cat02 := gsd.StatisticalData.ClassInf.Cat02().GetClass(v.Cat02)
@@ -206,7 +207,7 @@ func Example_s0003354197() {
 
 func Example_s0002019042() {
 	result := map[string]string{}
-	s("0002019042", func(gsd *estat.GetStatsData, v estat.Value) {
+	s("0002019042", func(gsd *estat.GetStatsDataResult, v estat.Value) {
 		if v.Cat01 == "1001" {
 			cat02 := gsd.StatisticalData.ClassInf.Cat02().GetClass(v.Cat02)
 			result[cat02.Name] = fmt.Sprintf("%v%v", v.Value, v.Unit)
@@ -284,12 +285,14 @@ func Example_s0002019042() {
 	// }
 }
 
-func s(statsDataId string, f func(*estat.GetStatsData, estat.Value)) {
+func s(statsDataId string, f func(*estat.GetStatsDataResult, estat.Value)) {
+	ctx := context.Background()
+
 	query := url.Values{}
 	query.Set("appId", os.Getenv("appId"))
 	query.Set("statsDataId", statsDataId)
 
-	gsd, err := estat.GetStats(query)
+	gsd, err := estat.GetStatsData(ctx, query)
 	if err != nil {
 		panic(err)
 	}
