@@ -9,21 +9,17 @@ import (
 
 // 指定した統計表ID又はデータセットIDに対応する統計データ（数値データ）を取得します。
 func GetStatsData(ctx context.Context, query url.Values) (*GetStatsDataResult, error) {
-	// https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0#api_2_3
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "http://api.e-stat.go.jp/rest/3.0/app/json/getStatsData?"+query.Encode(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	defer resp.Body.Close()
-
 	response := GetStatsDataResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+
+	// https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0#api_2_3
+	err := callAPI(
+		ctx,
+		http.MethodGet,
+		"http://api.e-stat.go.jp/rest/3.0/app/json/getStatsData?"+query.Encode(),
+		func(d *json.Decoder) error { return d.Decode(&response) },
+	)
+
+	if err != nil {
 		return nil, err
 	}
 
