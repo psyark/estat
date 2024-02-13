@@ -2,11 +2,11 @@ package estat
 
 import (
 	"context"
-	"encoding/json"
+	"io"
 	"net/http"
 )
 
-func callAPI(ctx context.Context, method string, url string, cb func(*json.Decoder) error) error {
+func callAPI(ctx context.Context, method string, url string, cb func([]byte) error) error {
 	req, err := http.NewRequestWithContext(ctx, method, url, nil)
 	if err != nil {
 		return err
@@ -18,5 +18,10 @@ func callAPI(ctx context.Context, method string, url string, cb func(*json.Decod
 	}
 
 	defer resp.Body.Close()
-	return cb(json.NewDecoder(resp.Body))
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	return cb(data)
 }

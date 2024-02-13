@@ -12,18 +12,12 @@ func GetStatsData(ctx context.Context, query url.Values) (*GetStatsDataResult, e
 	response := GetStatsDataResponse{}
 
 	// https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0#api_2_3
-	err := callAPI(
+	return &response.GetStatsData, callAPI(
 		ctx,
 		http.MethodGet,
 		"http://api.e-stat.go.jp/rest/3.0/app/json/getStatsData?"+query.Encode(),
-		func(d *json.Decoder) error { return d.Decode(&response) },
+		func(data []byte) error { return json.Unmarshal(data, &response) },
 	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &response.GetStatsData, nil
 }
 
 // https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0#api_4_4
