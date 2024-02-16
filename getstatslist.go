@@ -8,7 +8,7 @@ import (
 )
 
 // 政府統計の総合窓口（e-Stat）で提供している統計表の情報を取得します。リクエストパラメータの指定により条件を絞った情報の取得も可能です。
-func GetStatsList(ctx context.Context, query url.Values) (*GetStatsListContent, error) {
+func GetStatsList(ctx context.Context, query url.Values, options ...Option) (*GetStatsListContent, error) {
 	container := GetStatsListContainer{}
 
 	// https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0#api_2_1
@@ -16,7 +16,9 @@ func GetStatsList(ctx context.Context, query url.Values) (*GetStatsListContent, 
 		ctx,
 		http.MethodGet,
 		"http://api.e-stat.go.jp/rest/3.0/app/json/getStatsList?"+query.Encode(),
-		WithDataHandler(func(data []byte) error { return json.Unmarshal(data, &container) }),
+		append([]Option{
+			WithDataHandler(func(data []byte) error { return json.Unmarshal(data, &container) }),
+		}, options...)...,
 	)
 }
 
