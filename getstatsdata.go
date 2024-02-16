@@ -62,6 +62,7 @@ type GetStatsDataResultInf struct {
 	TotalNumber int `json:"TOTAL_NUMBER"`
 	FromNumber  int `json:"FROM_NUMBER"`
 	ToNumber    int `json:"TO_NUMBER"`
+	NextKey     int `json:"NEXT_KEY,omitempty"`
 }
 
 type TableInf struct {
