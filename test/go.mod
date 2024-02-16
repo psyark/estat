@@ -4,8 +4,6 @@ go 1.21
 
 replace github.com/psyark/estat => ../
 
-replace github.com/psyark/estat/test => ./
-
 require (
 	github.com/joho/godotenv v1.5.1
 	github.com/psyark/estat v0.0.0-00010101000000-000000000000
