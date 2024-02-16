@@ -8,24 +8,26 @@ import (
 )
 
 // 指定した統計表ID又はデータセットIDに対応する統計データ（数値データ）を取得します。
-func GetStatsData(ctx context.Context, query url.Values) (*GetStatsDataResult, error) {
-	response := GetStatsDataResponse{}
+func GetStatsData(ctx context.Context, query url.Values, options ...Option) (*GetStatsDataContent, error) {
+	container := GetStatsDataContainer{}
 
 	// https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0#api_2_3
-	return &response.GetStatsData, callAPI(
+	return &container.GetStatsData, callAPI(
 		ctx,
 		http.MethodGet,
 		"http://api.e-stat.go.jp/rest/3.0/app/json/getStatsData?"+query.Encode(),
-		func(data []byte) error { return json.Unmarshal(data, &response) },
+		append([]Option{
+			WithDataHandler(func(data []byte) error { return json.Unmarshal(data, &container) }),
+		}, options...)...,
 	)
 }
 
 // https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0#api_4_4
-type GetStatsDataResponse struct {
-	GetStatsData GetStatsDataResult `json:"GET_STATS_DATA"`
+type GetStatsDataContainer struct {
+	GetStatsData GetStatsDataContent `json:"GET_STATS_DATA"`
 }
 
-type GetStatsDataResult struct {
+type GetStatsDataContent struct {
 	Result          Result                `json:"RESULT"`
 	Parameter       GetStatsDataParameter `json:"PARAMETER"`
 	StatisticalData StatisticalData       `json:"STATISTICAL_DATA"`

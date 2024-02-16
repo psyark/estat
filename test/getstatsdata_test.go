@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 	"net/url"
 	"os"
 	"testing"
@@ -21,7 +19,9 @@ func init() {
 	}
 }
 
-func TestXxx(t *testing.T) {
+func TestGetStatsData(t *testing.T) {
+	ctx := context.Background()
+
 	for _, statsDataId := range []string{"0003354197", "0004009602", "0003313482", "0002019042"} {
 		statsDataId := statsDataId
 		t.Run(statsDataId, func(t *testing.T) {
@@ -29,33 +29,22 @@ func TestXxx(t *testing.T) {
 			query.Set("appId", os.Getenv("appId"))
 			query.Set("statsDataId", statsDataId)
 
-			resp, err := http.Get("http://api.e-stat.go.jp/rest/3.0/app/json/getStatsData?" + query.Encode())
-			if err != nil {
-				t.Fatal(err)
-			}
-
-			defer resp.Body.Close()
-
-			data, err := io.ReadAll(resp.Body)
-			if err != nil {
-				t.Fatal(err)
-			}
-
+			typed := estat.GetStatsDataContainer{}
 			untyped := map[string]any{}
-			if err := json.Unmarshal(data, &untyped); err != nil {
-				t.Fatal(err)
-			}
 
-			typed := estat.GetStatsDataResponse{}
-			if err := json.Unmarshal(data, &typed); err != nil {
+			_, err := estat.GetStatsData(ctx, query, estat.WithDataHandler(func(data []byte) error {
+				if err := json.Unmarshal(data, &typed); err != nil {
+					return err
+				}
+				return json.Unmarshal(data, &untyped)
+			}))
+			if err != nil {
 				t.Fatal(err)
 			}
 
 			data1, _ := json.MarshalIndent(untyped, "", "  ")
-
-			os.WriteFile(fmt.Sprintf("testdata/%s.json", statsDataId), data1, 0666)
-
 			data2, _ := json.MarshalIndent(typed, "", "  ")
+			_ = os.WriteFile(fmt.Sprintf("testdata/%s.json", statsDataId), data1, 0666)
 
 			patch, err := jsondiff.CompareJSON(data1, data2)
 			if err != nil {
@@ -63,7 +52,7 @@ func TestXxx(t *testing.T) {
 			}
 
 			for _, op := range patch {
-				fmt.Printf("%v %v: value=%v, oldValue=%v\n", op.Type, op.Path, op.Value, op.OldValue)
+				_, _ = fmt.Printf("%v %v: value=%v, oldValue=%v\n", op.Type, op.Path, op.Value, op.OldValue)
 			}
 
 			if len(patch) != 0 {
@@ -75,7 +64,7 @@ func TestXxx(t *testing.T) {
 
 func Example_s0004009602() {
 	result := map[string]string{}
-	s("0004009602", func(gsd *estat.GetStatsDataResult, v estat.Value) {
+	s("0004009602", func(gsd *estat.GetStatsDataContent, v estat.Value) {
 		if v.Tab == "0060" && v.Cat01 == "6" {
 			time := gsd.StatisticalData.ClassInf.Time().GetClass(v.Time)
 			result[time.Name] = fmt.Sprintf("%v%v", v.Value, v.Unit)
@@ -139,7 +128,7 @@ func Example_s0004009602() {
 
 func Example_s0003354197() {
 	result := map[string]map[string]string{}
-	s("0003354197", func(gsd *estat.GetStatsDataResult, v estat.Value) {
+	s("0003354197", func(gsd *estat.GetStatsDataContent, v estat.Value) {
 		if v.Cat03 == "100" && v.Time == "2001100000" {
 			cat01 := gsd.StatisticalData.ClassInf.Cat01().GetClass(v.Cat01)
 			cat02 := gsd.StatisticalData.ClassInf.Cat02().GetClass(v.Cat02)
@@ -207,7 +196,7 @@ func Example_s0003354197() {
 
 func Example_s0002019042() {
 	result := map[string]string{}
-	s("0002019042", func(gsd *estat.GetStatsDataResult, v estat.Value) {
+	s("0002019042", func(gsd *estat.GetStatsDataContent, v estat.Value) {
 		if v.Cat01 == "1001" {
 			cat02 := gsd.StatisticalData.ClassInf.Cat02().GetClass(v.Cat02)
 			result[cat02.Name] = fmt.Sprintf("%v%v", v.Value, v.Unit)
@@ -285,7 +274,7 @@ func Example_s0002019042() {
 	// }
 }
 
-func s(statsDataId string, f func(*estat.GetStatsDataResult, estat.Value)) {
+func s(statsDataId string, f func(*estat.GetStatsDataContent, estat.Value)) {
 	ctx := context.Background()
 
 	query := url.Values{}

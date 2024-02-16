@@ -36,7 +36,7 @@ func TestXxx2(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	typed := estat.GetStatsListResponse{}
+	typed := estat.GetStatsListContainer{}
 	if err := json.Unmarshal(data, &typed); err != nil {
 		t.Fatal(err)
 	}

@@ -6,7 +6,17 @@ import (
 	"net/http"
 )
 
-func callAPI(ctx context.Context, method string, url string, cb func([]byte) error) error {
+type optionStruct struct {
+	dataHandlers []func([]byte) error
+}
+type Option func(o *optionStruct)
+
+func callAPI(ctx context.Context, method string, url string, options ...Option) error {
+	os := optionStruct{}
+	for _, o := range options {
+		o(&os)
+	}
+
 	req, err := http.NewRequestWithContext(ctx, method, url, nil)
 	if err != nil {
 		return err
@@ -23,5 +33,17 @@ func callAPI(ctx context.Context, method string, url string, cb func([]byte) err
 		return err
 	}
 
-	return cb(data)
+	for _, dh := range os.dataHandlers {
+		if err := dh(data); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func WithDataHandler(handler func(b []byte) error) Option {
+	return func(o *optionStruct) {
+		o.dataHandlers = append(o.dataHandlers, handler)
+	}
 }
