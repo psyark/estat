@@ -10,15 +10,14 @@ import (
 // 指定した統計表ID又はデータセットIDに対応する統計データ（数値データ）を取得します。
 func GetStatsData(ctx context.Context, query url.Values, options ...Option) (*GetStatsDataContent, error) {
 	container := GetStatsDataContainer{}
+	options = append(options, WithDataHandler(func(data []byte) error { return json.Unmarshal(data, &container) }))
 
 	// https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0#api_2_3
 	return &container.GetStatsData, callAPI(
 		ctx,
 		http.MethodGet,
 		"http://api.e-stat.go.jp/rest/3.0/app/json/getStatsData?"+query.Encode(),
-		append([]Option{
-			WithDataHandler(func(data []byte) error { return json.Unmarshal(data, &container) }),
-		}, options...)...,
+		options...,
 	)
 }
 
@@ -95,9 +94,9 @@ type TitleSpec struct {
 	TableCategory     string `json:"TABLE_CATEGORY,omitempty"`
 	TableName         string `json:"TABLE_NAME,omitempty"`
 	TableExplanation  string `json:"TABLE_EXPLANATION,omitempty"`
-	TableSubCategory1 string `json:"TABLE_SUB_CATEGORY1,omitempty"`
-	TableSubCategory2 string `json:"TABLE_SUB_CATEGORY2,omitempty"`
-	TableSubCategory3 string `json:"TABLE_SUB_CATEGORY3,omitempty"`
+	TableSubCategory1 any    `json:"TABLE_SUB_CATEGORY1,omitempty"` // 0003090650 で 数値が入る
+	TableSubCategory2 any    `json:"TABLE_SUB_CATEGORY2,omitempty"`
+	TableSubCategory3 any    `json:"TABLE_SUB_CATEGORY3,omitempty"`
 }
 
 type ClassInf struct {
