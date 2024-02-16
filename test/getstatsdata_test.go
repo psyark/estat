@@ -25,35 +25,38 @@ func TestGetStatsData(t *testing.T) {
 	ctx := context.Background()
 
 	{
+		// 件数取得
 		query := url.Values{}
 		query.Set("appId", os.Getenv("appId"))
 		query.Set("limit", "1")
 
-		content, err := estat.GetStatsList(ctx, query, estat.WithDataHandler(func(data []byte) error {
-			return os.WriteFile("testdata/list.json", data, 0666)
-		}))
+		content, err := estat.GetStatsList(ctx, query)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		query.Set("startPosition", strconv.Itoa(rand.Intn(content.DatalistInf.Number)))
+		// ランダムな位置で10000件取得
+		const windowSize = 10000
+		query.Set("startPosition", strconv.Itoa(rand.Intn(content.DatalistInf.Number-windowSize)))
+		query.Set("limit", strconv.Itoa(windowSize))
 
-		content, err = estat.GetStatsList(ctx, query, estat.WithDataHandler(func(data []byte) error {
-			return os.WriteFile("testdata/list.json", data, 0666)
-		}))
+		content, err = estat.GetStatsList(ctx, query)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		statsDataId := content.DatalistInf.TableInf[0].ID
-		query = url.Values{}
-		query.Set("appId", os.Getenv("appId"))
-		query.Set("statsDataId", statsDataId)
-		_, err = estat.GetStatsData(ctx, query, estat.WithDataHandler(func(data []byte) error {
-			return os.WriteFile(fmt.Sprintf("testdata/%s.json", statsDataId), data, 0666)
-		}))
-		if err != nil {
-			t.Fatal(err)
+		// そこからランダムに取得
+		for i := 0; i < 10; i++ {
+			statsDataId := content.DatalistInf.TableInf[rand.Intn(len(content.DatalistInf.TableInf))].ID
+			query = url.Values{}
+			query.Set("appId", os.Getenv("appId"))
+			query.Set("statsDataId", statsDataId)
+			_, err = estat.GetStatsData(ctx, query, estat.WithDataHandler(func(data []byte) error {
+				return os.WriteFile(fmt.Sprintf("testdata/%s.json", statsDataId), data, 0666)
+			}))
+			if err != nil {
+				t.Fatal(err)
+			}
 		}
 	}
 
