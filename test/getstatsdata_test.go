@@ -42,7 +42,7 @@ func TestGetStatsData(t *testing.T) {
 
 		content, err = estat.GetStatsList(ctx, query)
 		if err != nil {
-			t.Fatal(err)
+			t.Fatal(err, query) // 偶発的なエラーのためにqueryを見る
 		}
 
 		// そこからランダムに取得
