@@ -29,22 +29,34 @@ func TestGetStatsData(t *testing.T) {
 			query.Set("appId", os.Getenv("appId"))
 			query.Set("statsDataId", statsDataId)
 
+			jsonFile := fmt.Sprintf("testdata/%s.json", statsDataId)
+
+			if _, err := os.Stat(jsonFile); os.IsNotExist(err) {
+				_, err := estat.GetStatsData(ctx, query, estat.WithDataHandler(func(data []byte) error {
+					return os.WriteFile(fmt.Sprintf("testdata/%s.json", statsDataId), data, 0666)
+				}))
+				if err != nil {
+					t.Fatal(err)
+				}
+			}
+
+			data, err := os.ReadFile(jsonFile)
+			if err != nil {
+				t.Fatal(err)
+			}
+
 			typed := estat.GetStatsDataContainer{}
 			untyped := map[string]any{}
 
-			_, err := estat.GetStatsData(ctx, query, estat.WithDataHandler(func(data []byte) error {
-				if err := json.Unmarshal(data, &typed); err != nil {
-					return err
-				}
-				return json.Unmarshal(data, &untyped)
-			}))
-			if err != nil {
+			if err := json.Unmarshal(data, &typed); err != nil {
+				t.Fatal(err)
+			}
+			if err := json.Unmarshal(data, &untyped); err != nil {
 				t.Fatal(err)
 			}
 
 			data1, _ := json.MarshalIndent(untyped, "", "  ")
 			data2, _ := json.MarshalIndent(typed, "", "  ")
-			_ = os.WriteFile(fmt.Sprintf("testdata/%s.json", statsDataId), data1, 0666)
 
 			patch, err := jsondiff.CompareJSON(data1, data2)
 			if err != nil {
