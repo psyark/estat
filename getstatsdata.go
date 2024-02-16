@@ -95,6 +95,8 @@ type TitleSpec struct {
 	TableName         string `json:"TABLE_NAME,omitempty"`
 	TableExplanation  string `json:"TABLE_EXPLANATION,omitempty"`
 	TableSubCategory1 string `json:"TABLE_SUB_CATEGORY1,omitempty"`
+	TableSubCategory2 string `json:"TABLE_SUB_CATEGORY2,omitempty"`
+	TableSubCategory3 string `json:"TABLE_SUB_CATEGORY3,omitempty"`
 }
 
 type ClassInf struct {
