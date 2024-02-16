@@ -10,7 +10,6 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/psyark/estat"
-	"github.com/wI2L/jsondiff"
 )
 
 func init() {
@@ -45,30 +44,15 @@ func TestGetStatsData(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			typed := estat.GetStatsDataContainer{}
-			untyped := map[string]any{}
-
-			if err := json.Unmarshal(data, &typed); err != nil {
-				t.Fatal(err)
-			}
-			if err := json.Unmarshal(data, &untyped); err != nil {
-				t.Fatal(err)
-			}
-
-			data1, _ := json.MarshalIndent(untyped, "", "  ")
-			data2, _ := json.MarshalIndent(typed, "", "  ")
-
-			patch, err := jsondiff.CompareJSON(data1, data2)
+			err = cyclicTest(data, func() ([]byte, error) {
+				typed := estat.GetStatsDataContainer{}
+				if err := json.Unmarshal(data, &typed); err != nil {
+					return nil, err
+				}
+				return json.Marshal(typed)
+			})
 			if err != nil {
 				t.Fatal(err)
-			}
-
-			for _, op := range patch {
-				_, _ = fmt.Printf("%v %v: value=%v, oldValue=%v\n", op.Type, op.Path, op.Value, op.OldValue)
-			}
-
-			if len(patch) != 0 {
-				t.Fatal("unmatch")
 			}
 		})
 	}
