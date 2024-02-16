@@ -21,7 +21,7 @@ func init() {
 func TestGetStatsData(t *testing.T) {
 	ctx := context.Background()
 
-	for _, statsDataId := range []string{"0003354197", "0004009602", "0003313482", "0002019042"} {
+	for _, statsDataId := range []string{"0003354197", "0004009602", "0003313482", "0002019042", "0003299758", "0003376171", "0003361083", "0003354179", "0003384347"} {
 		statsDataId := statsDataId
 		t.Run(statsDataId, func(t *testing.T) {
 			query := url.Values{}

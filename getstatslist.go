@@ -24,13 +24,25 @@ func GetStatsList(ctx context.Context, query url.Values, options ...Option) (*Ge
 
 // 3.2. 統計表情報取得
 
-// https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0#api_4_4
+// https://www.e-stat.go.jp/api/api-info/e-stat-manual3-0#api_4_2
 type GetStatsListContainer struct {
 	GetStatsList GetStatsListContent `json:"GET_STATS_LIST"`
 }
 
 type GetStatsListContent struct {
-	DATALIST_INF any    `json:"DATALIST_INF"`
-	PARAMETER    any    `json:"PARAMETER"`
-	RESULT       Result `json:"RESULT"`
+	Parameter   any         `json:"PARAMETER"`
+	DatalistInf DatalistInf `json:"DATALIST_INF"`
+	Result      Result      `json:"RESULT"`
+}
+
+type DatalistInf struct {
+	Number    int                   `json:"NUMBER"`
+	ResultInf GetStatsListResultInf `json:"RESULT_INF"`
+	TableInf  []TableInf            `json:"TABLE_INF"`
+}
+
+type GetStatsListResultInf struct {
+	FromNumber int `json:"FROM_NUMBER"`
+	ToNumber   int `json:"TO_NUMBER"`
+	NextKey    int `json:"NEXT_KEY"`
 }

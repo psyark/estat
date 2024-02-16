@@ -51,13 +51,13 @@ type GetStatsDataParameter struct {
 // StatisticalData is 4.4.2. STATISTICAL_DATA タグ
 // 統計データの情報を出力します。エラーがあった場合はこのタグ自体出力されません。
 type StatisticalData struct {
-	ResultInf ResultInf `json:"RESULT_INF"`
-	TableInf  TableInf  `json:"TABLE_INF"`
-	ClassInf  ClassInf  `json:"CLASS_INF"`
-	DataInf   DataInf   `json:"DATA_INF"`
+	ResultInf GetStatsDataResultInf `json:"RESULT_INF"`
+	TableInf  TableInf              `json:"TABLE_INF"`
+	ClassInf  ClassInf              `json:"CLASS_INF"`
+	DataInf   DataInf               `json:"DATA_INF"`
 }
 
-type ResultInf struct {
+type GetStatsDataResultInf struct {
 	TotalNumber int `json:"TOTAL_NUMBER"`
 	FromNumber  int `json:"FROM_NUMBER"`
 	ToNumber    int `json:"TO_NUMBER"`
@@ -86,11 +86,13 @@ type StatisticsNameSpec struct {
 	TabulationCategory     string `json:"TABULATION_CATEGORY"`
 	TabulationSubCategory1 string `json:"TABULATION_SUB_CATEGORY1,omitempty"`
 	TabulationSubCategory2 string `json:"TABULATION_SUB_CATEGORY2,omitempty"`
+	TabulationSubCategory3 string `json:"TABULATION_SUB_CATEGORY3,omitempty"`
 }
 type TitleSpec struct {
-	TableCategory    string `json:"TABLE_CATEGORY,omitempty"`
-	TableName        string `json:"TABLE_NAME,omitempty"`
-	TableExplanation string `json:"TABLE_EXPLANATION,omitempty"`
+	TableCategory     string `json:"TABLE_CATEGORY,omitempty"`
+	TableName         string `json:"TABLE_NAME,omitempty"`
+	TableExplanation  string `json:"TABLE_EXPLANATION,omitempty"`
+	TableSubCategory1 string `json:"TABLE_SUB_CATEGORY1,omitempty"`
 }
 
 type ClassInf struct {
@@ -109,6 +111,7 @@ func (i *ClassInf) GetClassObj(id string) *ClassObj {
 type ClassObj struct {
 	ID          string        `json:"@id"`
 	Name        string        `json:"@name"`
+	Description string        `json:"@description,omitempty"`
 	Class       ClassHelper   `json:"CLASS"`
 	Explanation []AnnotatedId `json:"EXPLANATION,omitempty"`
 }
@@ -153,7 +156,7 @@ type Value struct {
 	Cat03 string `json:"@cat03,omitempty"`
 	Area  string `json:"@area,omitempty"`
 	Time  string `json:"@time,omitempty"`
-	Unit  string `json:"@unit"`
+	Unit  string `json:"@unit,omitempty"`
 }
 
 type AnnotatedCode struct {
