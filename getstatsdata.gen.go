@@ -44,6 +44,46 @@ func (c NoteHelper) MarshalJSON() ([]byte, error) {
 	}
 }
 
+// ValueHelper は、Value の単一の値または配列を透過的にUnmarshal/Marshalするスライスです
+type ValueHelper []Value
+
+func (c *ValueHelper) UnmarshalJSON(d []byte) error {
+	if d[0] == '{' {
+		*c = make([]Value, 1)
+		return json.Unmarshal(d, &(*c)[0])
+	} else {
+		return json.Unmarshal(d, (*[]Value)(c))
+	}
+}
+
+func (c ValueHelper) MarshalJSON() ([]byte, error) {
+	if len(c) == 1 {
+		return json.Marshal(c[0])
+	} else {
+		return json.Marshal([]Value(c))
+	}
+}
+
+// TableInfHelper は、TableInf の単一の値または配列を透過的にUnmarshal/Marshalするスライスです
+type TableInfHelper []TableInf
+
+func (c *TableInfHelper) UnmarshalJSON(d []byte) error {
+	if d[0] == '{' {
+		*c = make([]TableInf, 1)
+		return json.Unmarshal(d, &(*c)[0])
+	} else {
+		return json.Unmarshal(d, (*[]TableInf)(c))
+	}
+}
+
+func (c TableInfHelper) MarshalJSON() ([]byte, error) {
+	if len(c) == 1 {
+		return json.Marshal(c[0])
+	} else {
+		return json.Marshal([]TableInf(c))
+	}
+}
+
 func (c ClassInf) Area() *ClassObj {
 	return c.GetClassObj("area")
 }

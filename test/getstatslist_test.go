@@ -3,8 +3,6 @@ package test
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"math/rand"
 	"net/url"
 	"os"
 	"testing"
@@ -33,9 +31,8 @@ func TestGetStatsList(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	typed := estat.GetStatsListContainer{}
-
 	err = cyclicTest(data, func() ([]byte, error) {
+		typed := estat.GetStatsListContainer{}
 		if err := json.Unmarshal(data, &typed); err != nil {
 			return nil, err
 		}
@@ -43,17 +40,5 @@ func TestGetStatsList(t *testing.T) {
 	})
 	if err != nil {
 		t.Fatal(err)
-	}
-
-	uncached := []estat.TableInf{}
-	for _, t := range typed.GetStatsList.DatalistInf.TableInf {
-		if _, err := os.Stat(fmt.Sprintf("testdata/%s.json", t.ID)); os.IsNotExist(err) {
-			uncached = append(uncached, t)
-		}
-	}
-
-	{
-		t := uncached[rand.Intn(len(uncached))]
-		fmt.Println(t.ID, t.GovOrg.Annotation, t.StatisticsName, t.Title)
 	}
 }

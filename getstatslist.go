@@ -38,7 +38,7 @@ type GetStatsListContent struct {
 type DatalistInf struct {
 	Number    int                   `json:"NUMBER"`
 	ResultInf GetStatsListResultInf `json:"RESULT_INF"`
-	TableInf  []TableInf            `json:"TABLE_INF"`
+	TableInf  TableInfHelper        `json:"TABLE_INF"`
 }
 
 type GetStatsListResultInf struct {

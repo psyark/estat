@@ -4,8 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/url"
 	"os"
+	"strconv"
+	"strings"
 	"testing"
 
 	"github.com/joho/godotenv"
@@ -21,40 +24,79 @@ func init() {
 func TestGetStatsData(t *testing.T) {
 	ctx := context.Background()
 
-	for _, statsDataId := range []string{"0003354197", "0004009602", "0003313482", "0002019042", "0003299758", "0003376171", "0003361083", "0003354179", "0003384347"} {
-		statsDataId := statsDataId
-		t.Run(statsDataId, func(t *testing.T) {
-			query := url.Values{}
-			query.Set("appId", os.Getenv("appId"))
-			query.Set("statsDataId", statsDataId)
+	{
+		query := url.Values{}
+		query.Set("appId", os.Getenv("appId"))
+		query.Set("limit", "1")
 
-			jsonFile := fmt.Sprintf("testdata/%s.json", statsDataId)
+		content, err := estat.GetStatsList(ctx, query, estat.WithDataHandler(func(data []byte) error {
+			return os.WriteFile("testdata/list.json", data, 0666)
+		}))
+		if err != nil {
+			t.Fatal(err)
+		}
 
-			if _, err := os.Stat(jsonFile); os.IsNotExist(err) {
-				_, err := estat.GetStatsData(ctx, query, estat.WithDataHandler(func(data []byte) error {
-					return os.WriteFile(fmt.Sprintf("testdata/%s.json", statsDataId), data, 0666)
-				}))
+		query.Set("startPosition", strconv.Itoa(rand.Intn(content.DatalistInf.Number)))
+
+		content, err = estat.GetStatsList(ctx, query, estat.WithDataHandler(func(data []byte) error {
+			return os.WriteFile("testdata/list.json", data, 0666)
+		}))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		statsDataId := content.DatalistInf.TableInf[0].ID
+		query = url.Values{}
+		query.Set("appId", os.Getenv("appId"))
+		query.Set("statsDataId", statsDataId)
+		_, err = estat.GetStatsData(ctx, query, estat.WithDataHandler(func(data []byte) error {
+			return os.WriteFile(fmt.Sprintf("testdata/%s.json", statsDataId), data, 0666)
+		}))
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	entries, err := os.ReadDir("testdata")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, entry := range entries {
+		if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".json") && entry.Name() != "list.json" {
+			statsDataId := strings.TrimSuffix(entry.Name(), ".json")
+			t.Run(statsDataId, func(t *testing.T) {
+				query := url.Values{}
+				query.Set("appId", os.Getenv("appId"))
+				query.Set("statsDataId", statsDataId)
+
+				jsonFile := fmt.Sprintf("testdata/%s.json", statsDataId)
+
+				if _, err := os.Stat(jsonFile); os.IsNotExist(err) {
+					_, err := estat.GetStatsData(ctx, query, estat.WithDataHandler(func(data []byte) error {
+						return os.WriteFile(fmt.Sprintf("testdata/%s.json", statsDataId), data, 0666)
+					}))
+					if err != nil {
+						t.Fatal(err)
+					}
+				}
+
+				data, err := os.ReadFile(jsonFile)
 				if err != nil {
 					t.Fatal(err)
 				}
-			}
 
-			data, err := os.ReadFile(jsonFile)
-			if err != nil {
-				t.Fatal(err)
-			}
-
-			err = cyclicTest(data, func() ([]byte, error) {
-				typed := estat.GetStatsDataContainer{}
-				if err := json.Unmarshal(data, &typed); err != nil {
-					return nil, err
+				err = cyclicTest(data, func() ([]byte, error) {
+					typed := estat.GetStatsDataContainer{}
+					if err := json.Unmarshal(data, &typed); err != nil {
+						return nil, err
+					}
+					return json.Marshal(typed)
+				})
+				if err != nil {
+					t.Fatal(err)
 				}
-				return json.Marshal(typed)
 			})
-			if err != nil {
-				t.Fatal(err)
-			}
-		})
+		}
 	}
 }
 

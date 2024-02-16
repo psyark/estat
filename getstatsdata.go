@@ -30,7 +30,7 @@ type GetStatsDataContainer struct {
 type GetStatsDataContent struct {
 	Result          Result                `json:"RESULT"`
 	Parameter       GetStatsDataParameter `json:"PARAMETER"`
-	StatisticalData StatisticalData       `json:"STATISTICAL_DATA"`
+	StatisticalData *StatisticalData      `json:"STATISTICAL_DATA,omitempty"`
 }
 
 // GetStatsDataParameter is 4.4.1. PARAMETER タグ
@@ -46,6 +46,7 @@ type GetStatsDataParameter struct {
 	SectionHeaderFlg  int    `json:"SECTION_HEADER_FLG,omitempty"`
 	StartPosition     int    `json:"START_POSITION"`
 	StatsDataID       string `json:"STATS_DATA_ID"`
+	Limit             int    `json:"LIMIT,omitempty"`
 }
 
 // StatisticalData is 4.4.2. STATISTICAL_DATA タグ
@@ -87,6 +88,7 @@ type StatisticsNameSpec struct {
 	TabulationSubCategory1 string `json:"TABULATION_SUB_CATEGORY1,omitempty"`
 	TabulationSubCategory2 string `json:"TABULATION_SUB_CATEGORY2,omitempty"`
 	TabulationSubCategory3 string `json:"TABULATION_SUB_CATEGORY3,omitempty"`
+	TabulationSubCategory4 string `json:"TABULATION_SUB_CATEGORY4,omitempty"`
 }
 type TitleSpec struct {
 	TableCategory     string `json:"TABLE_CATEGORY,omitempty"`
@@ -137,8 +139,8 @@ type Class struct {
 // 指定した絞り込み条件又はデータセットの条件又はその両方の条件によって抽出されるデータ件数が 0 の場合、このタグは出力されません。
 // また、件数取得フラグ(cntGetFlg)に”Y”(件数のみ取得する)を指定した場合も出力されません。
 type DataInf struct {
-	Note  NoteHelper `json:"NOTE"`
-	Value []Value    `json:"VALUE"`
+	Note  NoteHelper  `json:"NOTE"`
+	Value ValueHelper `json:"VALUE"`
 }
 
 type Note struct {
@@ -154,6 +156,10 @@ type Value struct {
 	Cat01 string `json:"@cat01,omitempty"`
 	Cat02 string `json:"@cat02,omitempty"`
 	Cat03 string `json:"@cat03,omitempty"`
+	Cat04 string `json:"@cat04,omitempty"`
+	Cat05 string `json:"@cat05,omitempty"`
+	Cat06 string `json:"@cat06,omitempty"`
+	Cat07 string `json:"@cat07,omitempty"`
 	Area  string `json:"@area,omitempty"`
 	Time  string `json:"@time,omitempty"`
 	Unit  string `json:"@unit,omitempty"`
