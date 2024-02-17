@@ -10,7 +10,7 @@ func (c *ClassHelper) UnmarshalJSON(d []byte) error {
 }
 
 func (c ClassHelper) MarshalJSON() ([]byte, error) {
-	return marshalList(([]Class)(c))
+	return marshalList(c)
 }
 
 // NoteHelper は、Note の単一の値または配列を透過的にUnmarshal/Marshalするスライスです
@@ -21,7 +21,7 @@ func (c *NoteHelper) UnmarshalJSON(d []byte) error {
 }
 
 func (c NoteHelper) MarshalJSON() ([]byte, error) {
-	return marshalList(([]Note)(c))
+	return marshalList(c)
 }
 
 // ValueHelper は、Value の単一の値または配列を透過的にUnmarshal/Marshalするスライスです
@@ -32,7 +32,7 @@ func (c *ValueHelper) UnmarshalJSON(d []byte) error {
 }
 
 func (c ValueHelper) MarshalJSON() ([]byte, error) {
-	return marshalList(([]Value)(c))
+	return marshalList(c)
 }
 
 // Area は、IDが "area" であるClassObjを返します

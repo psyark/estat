@@ -59,9 +59,7 @@ func addHelper(f *jen.File, name string) {
 	).Line()
 
 	f.Func().Params(jen.Id("c").Id(helperName)).Id("MarshalJSON").Call().Call(jen.Index().Byte(), jen.Error()).Block(
-		jen.Return().Id("marshalList").Call(
-			jen.Call(jen.Index().Id(name)).Call(jen.Id("c")),
-		),
+		jen.Return().Id("marshalList").Call(jen.Id("c")),
 	).Line()
 }
 

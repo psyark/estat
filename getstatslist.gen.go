@@ -10,5 +10,5 @@ func (c *TableInfHelper) UnmarshalJSON(d []byte) error {
 }
 
 func (c TableInfHelper) MarshalJSON() ([]byte, error) {
-	return marshalList(([]TableInf)(c))
+	return marshalList(c)
 }
