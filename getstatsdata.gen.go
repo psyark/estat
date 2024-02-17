@@ -76,3 +76,18 @@ func (c ClassInf) Cat01() *ClassObj {
 func (c ClassInf) Cat02() *ClassObj {
 	return c.GetClassObj("cat02")
 }
+func (c ClassInf) Cat03() *ClassObj {
+	return c.GetClassObj("cat03")
+}
+func (c ClassInf) Cat04() *ClassObj {
+	return c.GetClassObj("cat04")
+}
+func (c ClassInf) Cat05() *ClassObj {
+	return c.GetClassObj("cat05")
+}
+func (c ClassInf) Cat06() *ClassObj {
+	return c.GetClassObj("cat06")
+}
+func (c ClassInf) Cat07() *ClassObj {
+	return c.GetClassObj("cat07")
+}

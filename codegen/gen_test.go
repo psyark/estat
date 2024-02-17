@@ -17,7 +17,7 @@ func TestXxx(t *testing.T) {
 	}
 
 	// TODO 関数化
-	for _, classId := range []string{"area", "time", "cat01", "cat02"} {
+	for _, classId := range []string{"area", "time", "cat01", "cat02", "cat03", "cat04", "cat05", "cat06", "cat07"} {
 		upper := strings.ToUpper(classId[0:1]) + classId[1:]
 
 		gsdFile.Func().Params(jen.Id("c").Id("ClassInf")).Id(upper).Params().Op("*").Id("ClassObj").Block(
