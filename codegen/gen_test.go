@@ -16,13 +16,16 @@ func TestXxx(t *testing.T) {
 		addHelper(gsdFile, name)
 	}
 
-	// TODO 関数化
-	for _, classId := range []string{"area", "time", "cat01", "cat02", "cat03", "cat04", "cat05", "cat06", "cat07"} {
-		upper := strings.ToUpper(classId[0:1]) + classId[1:]
+	addClassAccesor(gsdFile, "area")
+	addClassAccesor(gsdFile, "time")
+	for i := 1; i <= 15; i++ {
+		addClassAccesor(gsdFile, fmt.Sprintf("cat%02d", i))
+	}
 
-		gsdFile.Func().Params(jen.Id("c").Id("ClassInf")).Id(upper).Params().Op("*").Id("ClassObj").Block(
-			jen.Return().Id("c").Dot("GetClassObj").Call(jen.Lit(classId)),
-		)
+	addValueAccesor(gsdFile, "area")
+	addValueAccesor(gsdFile, "time")
+	for i := 1; i <= 15; i++ {
+		addValueAccesor(gsdFile, fmt.Sprintf("cat%02d", i))
 	}
 
 	if err := gsdFile.Save("../getstatsdata.gen.go"); err != nil {
@@ -64,4 +67,23 @@ func addHelper(f *jen.File, name string) {
 			jen.Return().Qual("encoding/json", "Marshal").Call(jen.Index().Id(name).Call(jen.Id("c"))),
 		)),
 	).Line()
+}
+
+func addClassAccesor(f *jen.File, classID string) {
+	funcName := strings.ToUpper(classID[0:1]) + classID[1:]
+
+	f.Comment(fmt.Sprintf("%s は、IDが %q であるClassObjを返します", funcName, classID))
+	f.Func().Params(jen.Id("c").Id("ClassInf")).Id(funcName).Params().Op("*").Id("ClassObj").Block(
+		jen.Return().Id("c").Dot("GetClassObj").Call(jen.Lit(classID)),
+	)
+}
+
+func addValueAccesor(f *jen.File, classID string) {
+	propName := strings.ToUpper(classID[0:1]) + classID[1:]
+	funcName := strings.ToUpper(classID[0:1]) + classID[1:] + "Class"
+
+	f.Comment(fmt.Sprintf("%s は、このValueの %s に対応するClassを返します", funcName, propName))
+	f.Func().Params(jen.Id("v").Id("Value")).Id(funcName).Params(jen.Id("c").Id("ClassInf")).Op("*").Id("Class").Block(
+		jen.Return().Id("c").Dot("GetClassObj").Call(jen.Lit(classID)).Dot("GetClass").Call(jen.Id("v").Dot(propName)),
+	)
 }

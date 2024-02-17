@@ -64,30 +64,172 @@ func (c ValueHelper) MarshalJSON() ([]byte, error) {
 	}
 }
 
+// Area は、IDが "area" であるClassObjを返します
 func (c ClassInf) Area() *ClassObj {
 	return c.GetClassObj("area")
 }
+
+// Time は、IDが "time" であるClassObjを返します
 func (c ClassInf) Time() *ClassObj {
 	return c.GetClassObj("time")
 }
+
+// Cat01 は、IDが "cat01" であるClassObjを返します
 func (c ClassInf) Cat01() *ClassObj {
 	return c.GetClassObj("cat01")
 }
+
+// Cat02 は、IDが "cat02" であるClassObjを返します
 func (c ClassInf) Cat02() *ClassObj {
 	return c.GetClassObj("cat02")
 }
+
+// Cat03 は、IDが "cat03" であるClassObjを返します
 func (c ClassInf) Cat03() *ClassObj {
 	return c.GetClassObj("cat03")
 }
+
+// Cat04 は、IDが "cat04" であるClassObjを返します
 func (c ClassInf) Cat04() *ClassObj {
 	return c.GetClassObj("cat04")
 }
+
+// Cat05 は、IDが "cat05" であるClassObjを返します
 func (c ClassInf) Cat05() *ClassObj {
 	return c.GetClassObj("cat05")
 }
+
+// Cat06 は、IDが "cat06" であるClassObjを返します
 func (c ClassInf) Cat06() *ClassObj {
 	return c.GetClassObj("cat06")
 }
+
+// Cat07 は、IDが "cat07" であるClassObjを返します
 func (c ClassInf) Cat07() *ClassObj {
 	return c.GetClassObj("cat07")
+}
+
+// Cat08 は、IDが "cat08" であるClassObjを返します
+func (c ClassInf) Cat08() *ClassObj {
+	return c.GetClassObj("cat08")
+}
+
+// Cat09 は、IDが "cat09" であるClassObjを返します
+func (c ClassInf) Cat09() *ClassObj {
+	return c.GetClassObj("cat09")
+}
+
+// Cat10 は、IDが "cat10" であるClassObjを返します
+func (c ClassInf) Cat10() *ClassObj {
+	return c.GetClassObj("cat10")
+}
+
+// Cat11 は、IDが "cat11" であるClassObjを返します
+func (c ClassInf) Cat11() *ClassObj {
+	return c.GetClassObj("cat11")
+}
+
+// Cat12 は、IDが "cat12" であるClassObjを返します
+func (c ClassInf) Cat12() *ClassObj {
+	return c.GetClassObj("cat12")
+}
+
+// Cat13 は、IDが "cat13" であるClassObjを返します
+func (c ClassInf) Cat13() *ClassObj {
+	return c.GetClassObj("cat13")
+}
+
+// Cat14 は、IDが "cat14" であるClassObjを返します
+func (c ClassInf) Cat14() *ClassObj {
+	return c.GetClassObj("cat14")
+}
+
+// Cat15 は、IDが "cat15" であるClassObjを返します
+func (c ClassInf) Cat15() *ClassObj {
+	return c.GetClassObj("cat15")
+}
+
+// AreaClass は、このValueの Area に対応するClassを返します
+func (v Value) AreaClass(c ClassInf) *Class {
+	return c.GetClassObj("area").GetClass(v.Area)
+}
+
+// TimeClass は、このValueの Time に対応するClassを返します
+func (v Value) TimeClass(c ClassInf) *Class {
+	return c.GetClassObj("time").GetClass(v.Time)
+}
+
+// Cat01Class は、このValueの Cat01 に対応するClassを返します
+func (v Value) Cat01Class(c ClassInf) *Class {
+	return c.GetClassObj("cat01").GetClass(v.Cat01)
+}
+
+// Cat02Class は、このValueの Cat02 に対応するClassを返します
+func (v Value) Cat02Class(c ClassInf) *Class {
+	return c.GetClassObj("cat02").GetClass(v.Cat02)
+}
+
+// Cat03Class は、このValueの Cat03 に対応するClassを返します
+func (v Value) Cat03Class(c ClassInf) *Class {
+	return c.GetClassObj("cat03").GetClass(v.Cat03)
+}
+
+// Cat04Class は、このValueの Cat04 に対応するClassを返します
+func (v Value) Cat04Class(c ClassInf) *Class {
+	return c.GetClassObj("cat04").GetClass(v.Cat04)
+}
+
+// Cat05Class は、このValueの Cat05 に対応するClassを返します
+func (v Value) Cat05Class(c ClassInf) *Class {
+	return c.GetClassObj("cat05").GetClass(v.Cat05)
+}
+
+// Cat06Class は、このValueの Cat06 に対応するClassを返します
+func (v Value) Cat06Class(c ClassInf) *Class {
+	return c.GetClassObj("cat06").GetClass(v.Cat06)
+}
+
+// Cat07Class は、このValueの Cat07 に対応するClassを返します
+func (v Value) Cat07Class(c ClassInf) *Class {
+	return c.GetClassObj("cat07").GetClass(v.Cat07)
+}
+
+// Cat08Class は、このValueの Cat08 に対応するClassを返します
+func (v Value) Cat08Class(c ClassInf) *Class {
+	return c.GetClassObj("cat08").GetClass(v.Cat08)
+}
+
+// Cat09Class は、このValueの Cat09 に対応するClassを返します
+func (v Value) Cat09Class(c ClassInf) *Class {
+	return c.GetClassObj("cat09").GetClass(v.Cat09)
+}
+
+// Cat10Class は、このValueの Cat10 に対応するClassを返します
+func (v Value) Cat10Class(c ClassInf) *Class {
+	return c.GetClassObj("cat10").GetClass(v.Cat10)
+}
+
+// Cat11Class は、このValueの Cat11 に対応するClassを返します
+func (v Value) Cat11Class(c ClassInf) *Class {
+	return c.GetClassObj("cat11").GetClass(v.Cat11)
+}
+
+// Cat12Class は、このValueの Cat12 に対応するClassを返します
+func (v Value) Cat12Class(c ClassInf) *Class {
+	return c.GetClassObj("cat12").GetClass(v.Cat12)
+}
+
+// Cat13Class は、このValueの Cat13 に対応するClassを返します
+func (v Value) Cat13Class(c ClassInf) *Class {
+	return c.GetClassObj("cat13").GetClass(v.Cat13)
+}
+
+// Cat14Class は、このValueの Cat14 に対応するClassを返します
+func (v Value) Cat14Class(c ClassInf) *Class {
+	return c.GetClassObj("cat14").GetClass(v.Cat14)
+}
+
+// Cat15Class は、このValueの Cat15 に対応するClassを返します
+func (v Value) Cat15Class(c ClassInf) *Class {
+	return c.GetClassObj("cat15").GetClass(v.Cat15)
 }

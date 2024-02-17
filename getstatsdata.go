@@ -162,6 +162,14 @@ type Value struct {
 	Cat05 string `json:"@cat05,omitempty"`
 	Cat06 string `json:"@cat06,omitempty"`
 	Cat07 string `json:"@cat07,omitempty"`
+	Cat08 string `json:"@cat08,omitempty"`
+	Cat09 string `json:"@cat09,omitempty"`
+	Cat10 string `json:"@cat10,omitempty"`
+	Cat11 string `json:"@cat11,omitempty"`
+	Cat12 string `json:"@cat12,omitempty"`
+	Cat13 string `json:"@cat13,omitempty"`
+	Cat14 string `json:"@cat14,omitempty"`
+	Cat15 string `json:"@cat15,omitempty"`
 	Area  string `json:"@area,omitempty"`
 	Time  string `json:"@time,omitempty"`
 	Unit  string `json:"@unit,omitempty"`

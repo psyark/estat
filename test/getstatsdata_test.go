@@ -189,7 +189,7 @@ func Example_s0004009602() {
 	result := map[string]string{}
 	s("0004009602", func(gsd *estat.GetStatsDataContent, v estat.Value) {
 		if v.Tab == "0060" && v.Cat01 == "6" {
-			time := gsd.StatisticalData.ClassInf.Time().GetClass(v.Time)
+			time := v.TimeClass(gsd.StatisticalData.ClassInf)
 			result[time.Name] = fmt.Sprintf("%v%v", v.Value, v.Unit)
 		}
 	})
@@ -253,8 +253,8 @@ func Example_s0003354197() {
 	result := map[string]map[string]string{}
 	s("0003354197", func(gsd *estat.GetStatsDataContent, v estat.Value) {
 		if v.Cat03 == "100" && v.Time == "2001100000" {
-			cat01 := gsd.StatisticalData.ClassInf.Cat01().GetClass(v.Cat01)
-			cat02 := gsd.StatisticalData.ClassInf.Cat02().GetClass(v.Cat02)
+			cat01 := v.Cat01Class(gsd.StatisticalData.ClassInf)
+			cat02 := v.Cat02Class(gsd.StatisticalData.ClassInf)
 			if result[cat02.Name] == nil {
 				result[cat02.Name] = map[string]string{}
 			}
@@ -321,7 +321,7 @@ func Example_s0002019042() {
 	result := map[string]string{}
 	s("0002019042", func(gsd *estat.GetStatsDataContent, v estat.Value) {
 		if v.Cat01 == "1001" {
-			cat02 := gsd.StatisticalData.ClassInf.Cat02().GetClass(v.Cat02)
+			cat02 := v.Cat02Class(gsd.StatisticalData.ClassInf)
 			result[cat02.Name] = fmt.Sprintf("%v%v", v.Value, v.Unit)
 		}
 	})
