@@ -52,20 +52,16 @@ func addHelper(f *jen.File, name string) {
 	f.Type().Id(helperName).Index().Id(name)
 
 	f.Func().Params(jen.Id("c").Op("*").Id(helperName)).Id("UnmarshalJSON").Call(jen.Id("d").Index().Byte()).Error().Block(
-		jen.If(jen.Id("d").Index(jen.Lit(0)).Op("==").LitRune('{').Block(
-			jen.Op("*").Id("c").Op("=").Make(jen.Index().Id(name), jen.Lit(1)),
-			jen.Return().Qual("encoding/json", "Unmarshal").Call(jen.Id("d"), jen.Op("&").Call(jen.Op("*").Id("c")).Index(jen.Lit(0))),
-		).Else().Block(
-			jen.Return().Qual("encoding/json", "Unmarshal").Call(jen.Id("d"), jen.Call(jen.Op("*").Index().Id(name)).Call(jen.Id("c"))),
-		)),
+		jen.Return().Id("unmarshalList").Call(
+			jen.Call(jen.Op("*").Index().Id(name)).Call(jen.Id("c")),
+			jen.Id("d"),
+		),
 	).Line()
 
 	f.Func().Params(jen.Id("c").Id(helperName)).Id("MarshalJSON").Call().Call(jen.Index().Byte(), jen.Error()).Block(
-		jen.If(jen.Id("len").Call(jen.Id("c")).Op("==").Lit(1).Block(
-			jen.Return().Qual("encoding/json", "Marshal").Call(jen.Id("c").Index(jen.Lit(0))),
-		).Else().Block(
-			jen.Return().Qual("encoding/json", "Marshal").Call(jen.Index().Id(name).Call(jen.Id("c"))),
-		)),
+		jen.Return().Id("marshalList").Call(
+			jen.Call(jen.Index().Id(name)).Call(jen.Id("c")),
+		),
 	).Line()
 }
 
