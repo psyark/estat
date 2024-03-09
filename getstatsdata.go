@@ -116,7 +116,7 @@ type ClassObj struct {
 	ID          string        `json:"@id"`
 	Name        string        `json:"@name"`
 	Description string        `json:"@description,omitempty"`
-	Class       ClassList     `json:"CLASS"`
+	Class       List[Class]   `json:"CLASS"`
 	Explanation []AnnotatedId `json:"EXPLANATION,omitempty"`
 }
 
@@ -141,8 +141,8 @@ type Class struct {
 // 指定した絞り込み条件又はデータセットの条件又はその両方の条件によって抽出されるデータ件数が 0 の場合、このタグは出力されません。
 // また、件数取得フラグ(cntGetFlg)に”Y”(件数のみ取得する)を指定した場合も出力されません。
 type DataInf struct {
-	Note  NoteList  `json:"NOTE,omitempty"`
-	Value ValueList `json:"VALUE"`
+	Note  List[Note]  `json:"NOTE,omitempty"`
+	Value List[Value] `json:"VALUE"`
 }
 
 type Note struct {
